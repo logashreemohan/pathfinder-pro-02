@@ -14,7 +14,240 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      applications: {
+        Row: {
+          company: string
+          created_at: string
+          id: string
+          job_id: string
+          status: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          company: string
+          created_at?: string
+          id?: string
+          job_id: string
+          status?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          company?: string
+          created_at?: string
+          id?: string
+          job_id?: string
+          status?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      assessments: {
+        Row: {
+          answers: Json
+          completed_at: string | null
+          created_at: string
+          id: string
+          questions: Json
+          score: number | null
+          status: string
+          target_role: string | null
+          topic_scores: Json
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          questions?: Json
+          score?: number | null
+          status?: string
+          target_role?: string | null
+          topic_scores?: Json
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          questions?: Json
+          score?: number | null
+          status?: string
+          target_role?: string | null
+          topic_scores?: Json
+          user_id?: string
+        }
+        Relationships: []
+      }
+      badges: {
+        Row: {
+          awarded_at: string
+          code: string
+          description: string | null
+          id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          awarded_at?: string
+          code: string
+          description?: string | null
+          id?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          awarded_at?: string
+          code?: string
+          description?: string | null
+          id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          read: boolean
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          read?: boolean
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          read?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          branch: string | null
+          college: string | null
+          created_at: string
+          degree: string | null
+          full_name: string | null
+          grad_year: number | null
+          id: string
+          location: string | null
+          onboarded: boolean
+          preferences: Json
+          skills: string[]
+          target_role: string | null
+          updated_at: string
+        }
+        Insert: {
+          branch?: string | null
+          college?: string | null
+          created_at?: string
+          degree?: string | null
+          full_name?: string | null
+          grad_year?: number | null
+          id: string
+          location?: string | null
+          onboarded?: boolean
+          preferences?: Json
+          skills?: string[]
+          target_role?: string | null
+          updated_at?: string
+        }
+        Update: {
+          branch?: string | null
+          college?: string | null
+          created_at?: string
+          degree?: string | null
+          full_name?: string | null
+          grad_year?: number | null
+          id?: string
+          location?: string | null
+          onboarded?: boolean
+          preferences?: Json
+          skills?: string[]
+          target_role?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      resumes: {
+        Row: {
+          created_at: string
+          file_name: string
+          id: string
+          parsed: Json
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          id?: string
+          parsed?: Json
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          id?: string
+          parsed?: Json
+          user_id?: string
+        }
+        Relationships: []
+      }
+      roadmap_items: {
+        Row: {
+          completed: boolean
+          created_at: string
+          est_hours: number
+          id: string
+          mini_project: string | null
+          priority: number
+          resources: Json
+          tasks: Json
+          topic: string
+          user_id: string
+          why: string | null
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          est_hours?: number
+          id?: string
+          mini_project?: string | null
+          priority?: number
+          resources?: Json
+          tasks?: Json
+          topic: string
+          user_id: string
+          why?: string | null
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          est_hours?: number
+          id?: string
+          mini_project?: string | null
+          priority?: number
+          resources?: Json
+          tasks?: Json
+          topic?: string
+          user_id?: string
+          why?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
