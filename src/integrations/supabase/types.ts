@@ -44,6 +44,98 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_answers: {
+        Row: {
+          answered_at: string
+          assessment_id: string
+          id: string
+          is_correct: boolean
+          question_id: string
+          response_ms: number
+          selected_index: number
+          user_id: string
+        }
+        Insert: {
+          answered_at?: string
+          assessment_id: string
+          id?: string
+          is_correct: boolean
+          question_id: string
+          response_ms?: number
+          selected_index: number
+          user_id: string
+        }
+        Update: {
+          answered_at?: string
+          assessment_id?: string
+          id?: string
+          is_correct?: boolean
+          question_id?: string
+          response_ms?: number
+          selected_index?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_answers_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: true
+            referencedRelation: "assessment_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_questions: {
+        Row: {
+          assessment_id: string
+          correct_index: number
+          difficulty: string
+          id: string
+          options: Json
+          position: number
+          question: string
+          topic: string
+          user_id: string
+        }
+        Insert: {
+          assessment_id: string
+          correct_index: number
+          difficulty: string
+          id?: string
+          options: Json
+          position: number
+          question: string
+          topic: string
+          user_id: string
+        }
+        Update: {
+          assessment_id?: string
+          correct_index?: number
+          difficulty?: string
+          id?: string
+          options?: Json
+          position?: number
+          question?: string
+          topic?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_questions_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessments: {
         Row: {
           answers: Json
@@ -242,6 +334,54 @@ export type Database = {
           priority?: number
           resources?: Json
           tasks?: Json
+          topic?: string
+          user_id?: string
+          why?: string | null
+        }
+        Relationships: []
+      }
+      roadmap_tasks: {
+        Row: {
+          completed: boolean
+          completed_at: string | null
+          created_at: string
+          est_hours: number
+          id: string
+          kind: string
+          position: number
+          resource_label: string | null
+          resource_url: string | null
+          title: string
+          topic: string
+          user_id: string
+          why: string | null
+        }
+        Insert: {
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          est_hours?: number
+          id?: string
+          kind?: string
+          position?: number
+          resource_label?: string | null
+          resource_url?: string | null
+          title: string
+          topic: string
+          user_id: string
+          why?: string | null
+        }
+        Update: {
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          est_hours?: number
+          id?: string
+          kind?: string
+          position?: number
+          resource_label?: string | null
+          resource_url?: string | null
+          title?: string
           topic?: string
           user_id?: string
           why?: string | null
