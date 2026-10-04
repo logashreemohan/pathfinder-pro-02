@@ -270,3 +270,111 @@ export const DEMO = {
     ["os1", true], ["os2", false], ["git1", true], ["git2", false], ["sd1", true], ["sd2", false], ["js1", false],
   ] as [string, boolean][],
 };
+
+// ---------- Slice 1: balanced competency-based assessment ----------
+export interface Competency { label: string; topics: string[] }
+const SECTIONS: Record<string, [string[], string[], string[]]> = {
+  default: [["OOP", "JavaScript", "Python"], ["DSA"], ["SQL", "DBMS"]],
+  web: [["JavaScript", "React", "OOP"], ["DSA"], ["SQL", "DBMS"]],
+  data: [["Python", "Machine Learning"], ["DSA"], ["SQL", "DBMS"]],
+  infra: [["Operating Systems", "Computer Networks"], ["DSA"], ["SQL", "DBMS"]],
+};
+const ROLE_SECTION: Record<string, keyof typeof SECTIONS> = {
+  "Frontend Developer": "web", "Full Stack Developer": "web",
+  "Data Analyst": "data", "Data Scientist": "data", "AI Engineer": "data", "ML Engineer": "data",
+  "Cloud Engineer": "infra", Cybersecurity: "infra",
+};
+export function competenciesFor(role?: string | null): Competency[] {
+  const [a, b, c] = SECTIONS[ROLE_SECTION[role ?? ""] ?? "default"];
+  const first = ROLE_SECTION[role ?? ""] === "data" ? "Python & ML" : ROLE_SECTION[role ?? ""] === "infra" ? "OS & Networks" : ROLE_SECTION[role ?? ""] === "web" ? "JavaScript & React" : "Language & OOP";
+  return [{ label: first, topics: a }, { label: "Data Structures & Algorithms", topics: b }, { label: "SQL & Databases", topics: c }];
+}
+
+QUESTION_BANK.push(
+  q("dsa5", "DSA", "easy", "Which data structure follows Last-In-First-Out order?", ["Queue", "Stack", "Heap", "Graph"], 1),
+  q("dsa6", "DSA", "hard", "What is the worst-case time complexity of quicksort?", ["O(n log n)", "O(n²)", "O(n)", "O(log n)"], 1),
+  q("dsa7", "DSA", "medium", "Which technique finds a pair summing to a target in a sorted array in O(n)?", ["Two pointers", "Backtracking", "Memoization", "Bit masking"], 0),
+);
+
+/** 5 questions per competency: 2 easy, 2 medium, 1 hard (falls back to any difficulty). */
+export function pickBalanced(role?: string | null) {
+  const shuffle = <T,>(a: T[]) => [...a].sort(() => Math.random() - 0.5);
+  const plan: Difficulty[] = ["easy", "easy", "medium", "medium", "hard"];
+  return competenciesFor(role).flatMap((c) => {
+    let pool = shuffle(QUESTION_BANK.filter((x) => c.topics.includes(x.topic)));
+    return plan.map((d) => {
+      const pick = pool.find((x) => x.difficulty === d) ?? pool[0];
+      pool = pool.filter((x) => x !== pick);
+      return { ...pick, competency: c.label };
+    });
+  });
+}
+
+export const COMPETENCY_TASKS: Record<string, { title: string; kind: string; hours: number; label: string; url: string }[]> = {
+  "Language & OOP": [
+    { title: "Revise the 4 pillars of OOP with code examples", kind: "learn", hours: 3, label: "Refactoring.Guru", url: "https://refactoring.guru/design-patterns" },
+    { title: "Implement Singleton, Factory and Observer patterns", kind: "practice", hours: 4, label: "Refactoring.Guru", url: "https://refactoring.guru/design-patterns/catalog" },
+    { title: "Mini project: model a parking-lot system", kind: "project", hours: 6, label: "LLD primer", url: "https://github.com/ashishps1/awesome-low-level-design" },
+    { title: "Take the topic check in your next retest", kind: "assessment", hours: 1, label: "", url: "" },
+  ],
+  "JavaScript & React": [
+    { title: "Master closures, promises and the event loop", kind: "learn", hours: 4, label: "javascript.info", url: "https://javascript.info" },
+    { title: "Build 3 components with hooks and API data", kind: "practice", hours: 4, label: "react.dev", url: "https://react.dev/learn" },
+    { title: "Mini project: movie search app in React", kind: "project", hours: 8, label: "react.dev", url: "https://react.dev/learn" },
+    { title: "Take the topic check in your next retest", kind: "assessment", hours: 1, label: "", url: "" },
+  ],
+  "Python & ML": [
+    { title: "Practice comprehensions, generators and pandas", kind: "learn", hours: 4, label: "Python tutorial", url: "https://docs.python.org/3/tutorial/" },
+    { title: "Train and evaluate a classifier with scikit-learn", kind: "practice", hours: 5, label: "scikit-learn", url: "https://scikit-learn.org/stable/tutorial/" },
+    { title: "Mini project: end-to-end prediction model", kind: "project", hours: 8, label: "Kaggle Learn", url: "https://www.kaggle.com/learn" },
+    { title: "Take the topic check in your next retest", kind: "assessment", hours: 1, label: "", url: "" },
+  ],
+  "OS & Networks": [
+    { title: "Study scheduling, paging and deadlocks", kind: "learn", hours: 5, label: "OSTEP", url: "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
+    { title: "Trace an HTTP request end to end", kind: "practice", hours: 3, label: "Top-Down Networking", url: "https://gaia.cs.umass.edu/kurose_ross/online_lectures.htm" },
+    { title: "Mini project: CPU scheduling simulator", kind: "project", hours: 6, label: "OSTEP", url: "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
+    { title: "Take the topic check in your next retest", kind: "assessment", hours: 1, label: "", url: "" },
+  ],
+  "Data Structures & Algorithms": [
+    { title: "Solve 15 array & hashing problems", kind: "practice", hours: 6, label: "NeetCode 150", url: "https://neetcode.io/practice" },
+    { title: "Implement BFS, DFS and binary search from scratch", kind: "learn", hours: 4, label: "Striver A2Z", url: "https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2/" },
+    { title: "Solve 5 medium dynamic programming problems", kind: "practice", hours: 6, label: "LeetCode DP", url: "https://leetcode.com/studyplan/dynamic-programming/" },
+    { title: "Take the topic check in your next retest", kind: "assessment", hours: 1, label: "", url: "" },
+  ],
+  "SQL & Databases": [
+    { title: "Normalize a sample schema to 3NF", kind: "learn", hours: 3, label: "CMU Databases", url: "https://15445.courses.cs.cmu.edu/" },
+    { title: "Complete LeetCode SQL 50", kind: "practice", hours: 6, label: "SQL 50", url: "https://leetcode.com/studyplan/top-sql-50/" },
+    { title: "Learn transactions, isolation levels and indexing", kind: "learn", hours: 3, label: "Use The Index, Luke", url: "https://use-the-index-luke.com" },
+    { title: "Take the topic check in your next retest", kind: "assessment", hours: 1, label: "", url: "" },
+  ],
+};
+
+export const COMPETENCY_WHY: Record<string, string> = {
+  "Language & OOP": "Interviewers test language fluency and design thinking through classes, interfaces and SOLID.",
+  "JavaScript & React": "The most requested skills in frontend and full-stack internship listings.",
+  "Python & ML": "The core toolkit for every data, AI and ML role.",
+  "OS & Networks": "Infrastructure and security roles are built on processes, memory and networking.",
+  "Data Structures & Algorithms": "Every product company screens freshers with DSA coding rounds.",
+  "SQL & Databases": "Joins, normalization and transactions appear in almost every placement interview.",
+};
+
+export function evaluate(rows: { competency: string; difficulty: Difficulty; correct: boolean }[]) {
+  const w: Record<Difficulty, number> = { easy: 1, medium: 2, hard: 3 };
+  const by: Record<string, { correct: number; total: number; pts: number; max: number; pct: number }> = {};
+  let pts = 0, max = 0;
+  for (const r of rows) {
+    by[r.competency] ??= { correct: 0, total: 0, pts: 0, max: 0, pct: 0 };
+    const b = by[r.competency];
+    b.total++; b.max += w[r.difficulty]; max += w[r.difficulty];
+    if (r.correct) { b.correct++; b.pts += w[r.difficulty]; pts += w[r.difficulty]; }
+  }
+  for (const k in by) by[k].pct = Math.round((by[k].pts / by[k].max) * 100);
+  const score = max ? Math.round((pts / max) * 100) : 0;
+  const strong = Object.keys(by).filter((k) => by[k].pct >= 70);
+  const improve = Object.keys(by).filter((k) => by[k].pct >= 40 && by[k].pct < 70);
+  const gaps = Object.keys(by).filter((k) => by[k].pct < 40);
+  const coverage = Math.round(Object.values(by).reduce((s, b) => s + Math.min(b.pct, 70) / 70, 0) / (Object.keys(by).length || 1) * 100);
+  return { score, by, strong, improve, gaps, coverage };
+}
+
+export const levelOf = (pct: number) => (pct >= 85 ? "Advanced" : pct >= 70 ? "Proficient" : pct >= 40 ? "Developing" : "Beginner");
