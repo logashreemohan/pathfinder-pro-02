@@ -29,7 +29,7 @@ function Dashboard() {
       </div>
       <div className="grid gap-4 md:grid-cols-4">
         <Stat icon={Target} label="Career readiness" value={`${readiness}%`} />
-        <Stat icon={TrendingUp} label="Latest score" value={last ? `${last.score}%` : "—"} sub={prev ? `${last.score! - prev.score! >= 0 ? "+" : ""}${last.score! - prev.score!}% vs previous` : undefined} />
+        <Stat icon={TrendingUp} label="Latest score" value={last ? `${last.score}%` : "—"} sub={prev ? `${last!.score! - prev.score! >= 0 ? "+" : ""}${last!.score! - prev.score!}% vs previous` : undefined} />
         <Stat icon={Target} label="Requirement coverage" value={last ? `${coverage}%` : "—"} />
         <Stat icon={Award} label="Badges" value={String(data.badges.length)} />
       </div>
@@ -50,6 +50,6 @@ function Dashboard() {
   );
 }
 
-function Stat({ icon: Icon, label, value, sub }: { icon: typeof Target; label: string; value: string; sub?: string }) {
+function Stat({ icon: Icon, label, value, sub }: { icon: typeof Target; label: string; value: string; sub?: string | undefined }) {
   return <Card><CardContent className="p-5"><Icon className="h-5 w-5 text-primary" /><p className="mt-3 text-sm text-muted-foreground">{label}</p><p className="font-display text-3xl font-semibold">{value}</p>{sub && <p className="text-xs text-success">{sub}</p>}</CardContent></Card>;
 }

@@ -46,7 +46,7 @@ export async function startOrResumeAssessment(role: string) {
     assessment_id: a.id, user_id, position: i, topic: x.competency, difficulty: x.difficulty,
     question: x.question, options: x.options, correct_index: x.answer,
   }));
-  const { error: qe } = await supabase.from("assessment_questions").insert(qs);
+  const { error: qe } = await supabase.from("assessment_questions").insert(qs as never);
   if (qe) throw qe;
   return a.id;
 }
@@ -88,7 +88,7 @@ export async function submitAssessment(id: string) {
     user_id, topic: c, title: t.title, why: COMPETENCY_WHY[c], kind: t.kind, est_hours: t.hours,
     resource_label: t.label || null, resource_url: t.url || null, position: ci * 10 + ti,
   })));
-  if (tasks.length) await supabase.from("roadmap_tasks").insert(tasks);
+  if (tasks.length) await supabase.from("roadmap_tasks").insert(tasks as never);
 
   await award(user_id, "first_test", "First Step", "Completed your first career assessment");
   if (r.score >= 70) await award(user_id, "score_70", "Job Ready Core", "Scored 70% or more on an assessment");

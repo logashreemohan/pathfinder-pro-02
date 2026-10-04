@@ -20,7 +20,7 @@ export function ProfileForm({ onDone, submitLabel }: { onDone: () => void; submi
   async function save() {
     const id = await uid();
     const { error } = await supabase.from("profiles").update({ full_name: f.full_name, college: f.college, degree: f.degree, branch: f.branch, grad_year: Number(f.grad_year), location: f.location, target_role: f.target_role, skills: f.skills, preferences: { type: f.type, mode: f.mode, locations: f.locations, salary: f.salary }, onboarded: true, updated_at: new Date().toISOString() }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Profile saved");
     onDone();
   }

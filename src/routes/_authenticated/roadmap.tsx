@@ -29,7 +29,7 @@ function Roadmap() {
           <li key={topic}>
             <span className="absolute -left-[9px] mt-1.5 h-4 w-4 rounded-full border-2 border-background bg-primary" />
             <h2 className="text-xl font-semibold">{topic}</h2>
-            <p className="mb-3 text-sm text-muted-foreground">{tasks[0].why}</p>
+            <p className="mb-3 text-sm text-muted-foreground">{tasks[0]?.why}</p>
             <Card><CardContent className="divide-y p-0">
               {tasks.map((t) => (
                 <label key={t.id} className="flex cursor-pointer items-start gap-3 p-4">
