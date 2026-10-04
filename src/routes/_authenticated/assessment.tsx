@@ -34,7 +34,7 @@ function Assessment() {
   useEffect(() => { started.current = Date.now(); }, [i]);
 
   if (!data) return <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" />Preparing your personalized test…</div>;
-  const q = data.questions[i];
+  const q = data.questions[i]!;
   const ans = data.answers.find((a) => a.question_id === q.id);
   const answered = data.answers.length;
 
